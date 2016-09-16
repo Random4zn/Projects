@@ -10,10 +10,9 @@
 #include <ctype.h>
 using namespace std;
 
-std::string LibComp(std::vector<std::string> stackP);
-std::string NextToken(std::string Tok_);
 std::vector<std::string> parseID(std::vector<std::string> parseStack);
 std::vector<std::string> parseKey(std::vector<std::string> parseStack);
+std::vector<std::string> parseOp(std::vector<std::string> parseStack);
 
 std::vector<std::string> parseID(std::vector<std::string> parseStack)
 {
@@ -49,20 +48,14 @@ std::vector<std::string> parseKey(std::vector<std::string> parseStack)
 		tempP_ = parseStack[i];
 		for (int k = 0; k < tempP_.length(); k++)
 		{
-			if ((isalpha(tempP_[k])) || (tempP_[k] == '=')) 
+			if (isalpha(tempP_[k])) 
 			{ 
 				Key_ += tempP_[k];
 			}
 
 			if (tempP_[k] == '=')
 			{
-				for (int z = (k+1); z < tempP_.length(); z++)
-				{
-					if((tempP_[z] != 34) && (tempP_[z] != 39))
-					{
-						Key_ += tempP_[z];
-					}
-				}
+				Key_ += tempP_[k];
 				break;
 			}
 		}
@@ -75,38 +68,35 @@ std::vector<std::string> parseKey(std::vector<std::string> parseStack)
 }
 
 
-std::string LibComp(std::vector<std::string> stackP)
+std::vector<std::string> parseOp(std::vector<std::string> parseStack)
 {
-	std::string temp_ = "";
-	if (!stackP.empty())
+	string tempP_ = "";
+	string Key_   = "";
+	vector<string> keyParsed;
+
+	for (int i = 0; i < parseStack.size(); i++)
 	{
-		for (int i = 0; i < stackP.size(); i++)
+		tempP_ = parseStack[i];
+		for (int k = 0; k < tempP_.length(); k++)
 		{
-			temp_ = NextToken(stackP[i]);
-		}
-	}
-
-
-	//return "(Tok: id= <ID#> line= <line> str= “<token>” [int= <int> | float= <float>])";
-	return temp_;
-}
-
-std::string NextToken(std::string Tok_)
-{
-	std::vector<std::string> Prag_;
-	//Train the Prag_;
-
-	if (!Prag_.empty())
-	{
-		for (int i = 0; i < Prag_.size(); i++)
-		{
-			if ((Tok_ == Prag_[i]) && (Prag_[i] == "print"))
+			if (tempP_[k] == '=')
 			{
-				return "ID:10, Print";
+				for (int z = (k + 1); z < tempP_.length(); z++)
+				{
+					if ((tempP_[z] != 34) && (tempP_[z] != 39))
+					{
+						Key_ += tempP_[z];
+					}
+					
+				}
 			}
 		}
+
+		keyParsed.push_back(Key_);
+		Key_.clear();
 	}
-	return "0";
+
+	return keyParsed;
 }
 
 int main()
@@ -115,7 +105,6 @@ int main()
 	std::string testW = "";
 	std::vector<std::string> stackP;
 	std::vector<std::string> A2RuleSet;
-
 
 	for (int i = 0; i <= testS.length(); i++)
 	{
@@ -142,21 +131,26 @@ int main()
 	}
 	else cout << "Unable to open file";
 
-
 	std::vector<std::string> A2iD_  = parseID(A2RuleSet);
 	std::vector<std::string> A2Key_ = parseKey(A2RuleSet);
+	std::vector<std::string> A2Op_  = parseOp(A2RuleSet);
 
 	/* for (int i = 0; i < A2iD_.size(); i++)
 	{
 		cout << A2iD_[i] << endl;
 	} */
 
-	for (int i = 0; i < A2Key_.size(); i++)
+	/*for (int i = 0; i < A2Key_.size(); i++)
 	{
 		cout << A2Key_[i] << endl;
-	}
+	}*/
 
-	std::string Tok_ = LibComp(stackP);
+	for (int i = 0; i < A2Op_.size(); i++)
+	{
+		cout << A2iD_[i];
+		cout << A2Key_[i];
+		cout << A2Op_[i] << endl;
+	}
 
 	std::cin.ignore();
 	std::cin.ignore();
