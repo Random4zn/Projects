@@ -83,7 +83,7 @@ std::vector<std::string> parseOp(std::vector<std::string> parseStack)
 			{
 				for (int z = (k + 1); z < tempP_.length(); z++)
 				{
-					if ((tempP_[z] != 34) && (tempP_[z] != 39))
+					if ((tempP_[z] != 34) && (tempP_[z] != 39) && (tempP_[z] != ' '))
 					{
 						Key_ += tempP_[z];
 					}
@@ -101,7 +101,7 @@ std::vector<std::string> parseOp(std::vector<std::string> parseStack)
 
 int main()
 {
-	std::string testS = "'print\( \"Hypotenuse = \", ( a * a + b * b ) ^ 0.5 )\;'";
+	std::string testS = "'print(\"Hypotenuse = \", ( a * a + b * b ) ^ 0.5 )\;'";
 	std::string testW = "";
 	std::vector<std::string> stackP;
 	std::vector<std::string> A2RuleSet;
@@ -145,12 +145,21 @@ int main()
 		cout << A2Key_[i] << endl;
 	}*/
 
+	/*for (int i = 0; i < A2Op_.size(); i++)
+	{
+		cout << A2Op_[i] << endl;
+	}*/
+
 	for (int i = 0; i < A2Op_.size(); i++)
 	{
-		cout << A2iD_[i];
-		cout << A2Key_[i];
-		cout << A2Op_[i] << endl;
+		size_t found = testS.find(A2Op_[i]);
+		if (found != string::npos)
+		{
+			cout << A2iD_[i] << "" << A2Key_[i] << " "<< A2Op_[i] << endl;
+		}
 	}
+
+
 
 	std::cin.ignore();
 	std::cin.ignore();
