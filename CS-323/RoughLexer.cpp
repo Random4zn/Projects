@@ -5,9 +5,37 @@
 #include <vector>
 #include <iomanip>
 #include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <ctype.h>
+using namespace std;
 
 std::string LibComp(std::vector<std::string> stackP);
 std::string NextToken(std::string Tok_);
+std::vector<std::string> parseID(std::vector<std::string> parseStack);
+
+std::vector<std::string> parseID(std::vector<std::string> parseStack)
+{
+	string tempP_ = "";
+	string iD_    = "";
+	vector<string> idParsed;
+
+	for (int i = 0; i < parseStack.size(); i++)
+	{
+		tempP_ = parseStack[i];
+		for (int k = 0; k < tempP_.length(); k++)
+		{
+			if (isalpha(tempP_[k])) { break; }
+			else { iD_ += tempP_[k]; }
+		}
+
+		idParsed.push_back(iD_);
+		iD_.clear();
+
+	}
+
+	return idParsed;
+}
 
 std::string LibComp(std::vector<std::string> stackP)
 {
@@ -48,6 +76,8 @@ int main()
 	std::string testS = "'print\( \"Hypotenuse = \", ( a * a + b * b ) ^ 0.5 )\;'";
 	std::string testW = "";
 	std::vector<std::string> stackP;
+	std::vector<std::string> A2RuleSet;
+
 
 	for (int i = 0; i <= testS.length(); i++)
 	{
@@ -57,28 +87,35 @@ int main()
 		}
 		else
 		{
-			std::cout << testW << std::endl;
 			stackP.push_back(testW);
 			testW.clear();
 		}
 	}
 
+	string line;
+	ifstream myfile("A2LexiconKey.txt");
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			A2RuleSet.push_back(line);
+		}
+		myfile.close();
+	}
+	else cout << "Unable to open file";
+
+
+	std::vector<std::string> A2iD_ = parseID(A2RuleSet);
+
+	for (int i = 0; i < A2iD_.size(); i++)
+	{
+		cout << A2iD_[i] << endl;
+	}
+
 	std::string Tok_ = LibComp(stackP);
-
-	std::cout << Tok_ << std::endl;
-
-	//while (!eof())
-	//{
-	//Generate line
-	//Grab line string
-	//Split the string
-	//DFS //finite state machine
-	//Generate output
-	//}
 
 	std::cin.ignore();
 	std::cin.ignore();
 
 	return 0;
 }
-
