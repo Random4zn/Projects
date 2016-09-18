@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <cctype>
+#include <algorithm>
 using namespace std;
 
 std::vector<std::string> parseID(std::vector<std::string> parseStack);
@@ -113,8 +114,11 @@ int main()
 	{
 		while (getline(keyfile, keyline))
 		{
-			if (keyline.at(0))
-			A2RuleSet.push_back(keyline);
+			if (keyline.at(0) != '/')
+			{
+				A2RuleSet.push_back(keyline);
+			}
+
 		}
 		keyfile.close();
 	}
@@ -143,11 +147,17 @@ int main()
 		{
 			++number_of_lines;
 			string temp_ = "Line " + to_string(number_of_lines) + ": ";
+			remove_if(dummyline.begin(), dummyline.end(), isspace);
 			dummyText.push_back(temp_ + dummyline);
 		}
 		dummyfile.close();
 	}
 	else cout << "Unable to open file";
+
+	for (int i = 0; i < dummyText.size(); i++)
+	{
+
+	}
 
 	int line_ = 0;
 	for (int i = 0; i < dummyText.size(); i++)
@@ -166,7 +176,7 @@ int main()
 				size_t found = temp_.find(A2Op_[j]);
 				if (found != string::npos)
 				{
-					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << A2Key_[j] << " str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
+					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << A2Key_[j] << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
 				}
 			}
 		}
