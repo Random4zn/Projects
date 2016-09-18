@@ -148,6 +148,18 @@ int main()
 			++number_of_lines;
 			string temp_ = "Line " + to_string(number_of_lines) + ": ";
 			remove_if(dummyline.begin(), dummyline.end(), isspace);
+
+			//IF STATEMENT - This section is designed to remove any comments
+			//               written by the user. This is due to the fact that
+			//               we are allowed to treat comments as whitespace up to newline char;
+			//
+			// FURTHER TESTING NEEDED ( )
+			size_t comment_ = dummyline.find("//");
+			if (comment_ != string::npos)
+			{
+				dummyline.erase(comment_, dummyline.length());
+			}
+			//Line Vector: Overall structure of the program stack.
 			dummyText.push_back(temp_ + dummyline);
 		}
 		dummyfile.close();
@@ -156,7 +168,7 @@ int main()
 
 	for (int i = 0; i < dummyText.size(); i++)
 	{
-
+		//cout << dummyText[i] << endl;
 	}
 
 	int line_ = 0;
@@ -174,9 +186,10 @@ int main()
 		    {
 				//Modify for more then one of the keyword.
 				size_t found = temp_.find(A2Op_[j]);
+				cout << A2Op_[j] << endl;
 				if (found != string::npos)
 				{
-					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << A2Key_[j] << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
+					//cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
 				}
 			}
 		}
