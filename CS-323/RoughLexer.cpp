@@ -12,6 +12,11 @@ int main()
 	vector<string> A2Key_ = ruleset.parseKey(A2_Lexer);
 	vector<string> A2Op_  = ruleset.parseOp(A2_Lexer);
 
+	for (int i = 0; i < A2_Lexer.size(); i++)
+	{
+		//cout << A2_Lexer[i] << endl;
+	}
+
 //------------------------------------------------------------------------------
 	string Textword_ = "";
 	string Textline_ = "";
@@ -55,15 +60,22 @@ int main()
 	{
 		//cout << dummyText[i] << endl;
 	}
+	vector<int>line_track;
+	for (int i = 0; i < number_of_lines; i++)
+	{
+		line_track.push_back((i+1));
+	}
+
 
 	int line_ = 0;
-	vector<int>line_track;
-	line_track.push_back(1);
+	bool intFlag   = false;
+	bool signFlag  = false;
+	bool floatFlag = false;
+	string temp_digit = "";
 	for (int i = 0; i < dummyText.size(); i++)
 	{
 		//Getting the line number and getting rid of the "Line String"
 		++line_;
-		line_track.push_back(line_);
 		string key_  = "Line " + to_string(line_) + ": ";
 		size_t L_ine = dummyText[i].find(key_);
 		if (L_ine != string::npos)
@@ -71,71 +83,98 @@ int main()
 			//-----------------------++++
 			//Parsing of the string 
 			string temp_ = dummyText[i];
-			string temp_digit = "";
 			int floatcount_ = 0;
 			temp_.erase(L_ine, key_.length());
-			cout << temp_ << endl;
 			for (int j = 0; j < temp_.length(); j++)
 		    {
 				if (temp_[j] == ';') { break; } //end of line count
-				//Modify for more then one of the keyword.
-				//Next_Token() function would go here.
-				//TRY BLOCK
-				try
+
+				size_t found_Float = temp_.find(".");
+				if (found_Float != string::npos)
 				{
-					if (isdigit(temp_[j]) && (temp_[j] != ';'))
+					floatFlag = true;
+					//Modify for more then one of the keyword.
+					//Next_Token() function would go here.
+					//TRY BLOCK
+					try
 					{
-						temp_digit += temp_[j];
-						//No out of bounds
-						//Checks to see if there is a sign in leading number.
-						//OPTIMIZE THIS LATER ()
-						if ((j - 1) >= 0)
+						if (isdigit(temp_[j]) && (temp_[j] != ';'))
 						{
-							if (temp_[(j - 1)] == '-')
+							if (floatFlag)
 							{
-								//sign would go here
-								//cout << temp_[(j - 1)] << endl;
-
-							}
-						}
-
-						//Checks to see if there is a float in the string.
-						if (floatcount_ < 1)
-						{
-							for (int l = j; l < temp_.length(); l++)
-							{
-								//temp_digit += temp_[j];
-								if (temp_[l] == ';') { break; } //end of line count
-								if (temp_[l] == ' ') { break; } //space count
-								if (temp_[l] == '.')
+								for (int l = j; l < temp_.length(); l++)
 								{
+									if (temp_[l] == ';') { break; } //end of line count
+									if (temp_[l] == ' ') { break; } //space count
+
 									++floatcount_;
 									temp_digit += temp_[l];
 									j = l;
-									break;
-								} //float count
+								}
 							}
-						}
 
+						}
+					}
+					catch (int Error)
+					{
+						cout << "Bob" << endl;
 					}
 				}
-				catch(int error)
+				
+				//Modify for more then one of the keyword.
+				//Next_Token() function would go here.
+				//TRY BLOCK
+				if (!floatFlag)
 				{
-					cout << "Error code: " << error << endl;
+					try
+					{
+						if (isdigit(temp_[j]) && (temp_[j] != ';'))
+						{
+							intFlag = true;
+							temp_digit += temp_[j];
+							//No out of bounds
+							//Checks to see if there is a sign in leading number.
+							//OPTIMIZE THIS LATER ()
+							if ((j - 1) >= 0)
+							{
+								if (temp_[(j - 1)] == '-')
+								{
+									signFlag = true;
+									//sign would go here
+									//cout << temp_[(j - 1)] << endl;
+
+								}
+							}
+
+						}
+					}
+					catch (int error)
+					{
+						cout << "Error code: " << error << endl;
+					}
 				}
 
-				if (floatcount_ == 1)
-				{
-					//if (line_ > line_track[(line_-1)])
-					//cout << temp_digit << endl;
-				}
 				size_t found = temp_.find(A2Op_[j]);
 				//cout << A2Op_[j] << endl;
 				if (found != string::npos)
 				{
-					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
+					//cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
 				}
 			}
+		}
+
+		if ((intFlag) && !(floatFlag))
+		{
+			cout << "(Tok: id= " << A2iD_[0] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\"" << ")" << endl;
+			temp_digit.clear();
+			intFlag = false;
+		}
+		else if (!(intFlag) && (floatFlag))
+		{
+			cout << "(Tok: id= " << A2iD_[1] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\"" << ")" << endl;
+			temp_digit.clear();
+			intFlag = false;
+			floatFlag = false;
 		}
 
 	}
