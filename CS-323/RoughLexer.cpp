@@ -150,18 +150,23 @@ int main()
 
 			//FloatLoop
 			string token_ = "";
+			bool tokenCheck = false;
 			for (int j = 0; j < temp_.length(); j++)
 			{
 				if (temp_[j] == ';') { break; } //end of line count
 				token_ += temp_[j];
-				//cout << token_ << endl;
-				size_t found = token_.find(A2Op_[j]);
-				if (found != string::npos)
+				token_.erase(remove_if(token_.begin(), token_.end(), isspace), token_.end());
+				for (int z = 0; z < A2Op_.size(); z++)
 				{
-					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
-					token_.clear();
+					//MAKE THIS MORE COMPLEX!
+					tokenCheck = (token_ == A2Op_[z]);
+					if (tokenCheck) 
+					{ 
+						cout << "(Tok: id= " << A2iD_[z] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[z] << "\"" << ")" << endl;
+						token_.clear();
+						break; 
+					}
 				}
-				//if (temp_[j] == ' ') { token_.clear(); }
 
 			}
 
