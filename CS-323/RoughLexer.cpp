@@ -158,20 +158,20 @@ int main()
 				//cout << A2Op_[j] << endl;
 				if (found != string::npos)
 				{
-					//cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
+					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
 				}
 			}
 		}
 
 		if ((intFlag) && !(floatFlag))
 		{
-			cout << "(Tok: id= " << A2iD_[0] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\"" << ")" << endl;
+			cout << "(Tok: id= " << A2iD_[0] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "int=" << temp_digit << ")" << endl;
 			temp_digit.clear();
 			intFlag = false;
 		}
 		else if (!(intFlag) && (floatFlag))
 		{
-			cout << "(Tok: id= " << A2iD_[1] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\"" << ")" << endl;
+			cout << "(Tok: id= " << A2iD_[1] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "float=" << temp_digit << ")" << endl;
 			temp_digit.clear();
 			intFlag = false;
 			floatFlag = false;
