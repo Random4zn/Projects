@@ -35,9 +35,8 @@ int main()
 		while (getline(dummyfile, dummyline))
 		{
 			++number_of_lines;
-			string temp_ = "Line " + to_string(number_of_lines) + ": ";
-			remove_if(dummyline.begin(), dummyline.end(), isspace);
 
+			string temp_ = "Line " + to_string(number_of_lines) + ": ";
 			//IF STATEMENT - This section is designed to remove any comments
 			//               written by the user. This is due to the fact that
 			//               we are allowed to treat comments as whitespace up to newline char;
@@ -50,7 +49,6 @@ int main()
 			}
 			//Line Vector: Overall structure of the program stack.
 			dummyText.push_back(temp_ + dummyline);
-
 		}
 		dummyfile.close();
 	}
@@ -60,12 +58,6 @@ int main()
 	{
 		//cout << dummyText[i] << endl;
 	}
-	vector<int>line_track;
-	for (int i = 0; i < number_of_lines; i++)
-	{
-		line_track.push_back((i+1));
-	}
-
 
 	int line_ = 0;
 	bool intFlag   = false;
@@ -85,6 +77,8 @@ int main()
 			string temp_ = dummyText[i];
 			int floatcount_ = 0;
 			temp_.erase(L_ine, key_.length());
+
+			//FloatLoop
 			for (int j = 0; j < temp_.length(); j++)
 		    {
 				if (temp_[j] == ';') { break; } //end of line count
@@ -117,15 +111,17 @@ int main()
 					}
 					catch (int Error)
 					{
-						cout << "Bob" << endl;
+						cout << "Error code: " << Error << endl;
 					}
 				}
 				
 				//Modify for more then one of the keyword.
 				//Next_Token() function would go here.
-				//TRY BLOCK
+
+				//IF-STATEMENT INTEGER CHECK
 				if (!floatFlag)
 				{
+					//TRY BLOCK
 					try
 					{
 						if (isdigit(temp_[j]) && (temp_[j] != ';'))
@@ -144,31 +140,41 @@ int main()
 									//cout << temp_[(j - 1)] << endl;
 
 								}
-							}
+							}//END OF OUT-OF-BOUNDS-IF-STATEMENT
+						}//END OF INTEGERCHECK-IF-STATEMENT
+					}//END OF TRY
+					catch (int Error) { cout << "Error code: " << Error << endl; }
 
-						}
-					}
-					catch (int error)
-					{
-						cout << "Error code: " << error << endl;
-					}
-				}
+				}//END OF INTEGER-IF-STATEMENT
+			}//END OF INTERGER-FLOAT-LOOP-CHECK
 
-				size_t found = temp_.find(A2Op_[j]);
-				//cout << A2Op_[j] << endl;
+			//FloatLoop
+			string token_ = "";
+			for (int j = 0; j < temp_.length(); j++)
+			{
+				if (temp_[j] == ';') { break; } //end of line count
+				token_ += temp_[j];
+				//cout << token_ << endl;
+				size_t found = token_.find(A2Op_[j]);
 				if (found != string::npos)
 				{
 					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
+					token_.clear();
 				}
+				//if (temp_[j] == ' ') { token_.clear(); }
+
 			}
+
 		}
 
+		//OUTPUT - Int
 		if ((intFlag) && !(floatFlag))
 		{
 			cout << "(Tok: id= " << A2iD_[0] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "int=" << temp_digit << ")" << endl;
 			temp_digit.clear();
 			intFlag = false;
 		}
+		//OUTPUT - Float
 		else if (!(intFlag) && (floatFlag))
 		{
 			cout << "(Tok: id= " << A2iD_[1] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "float=" << temp_digit << ")" << endl;
