@@ -81,7 +81,7 @@ int main()
 			//FloatLoop
 			for (int j = 0; j < temp_.length(); j++)
 		    {
-				if (temp_[j] == ';') { break; } //end of line count
+				//if (temp_[j] == ';') { break; } //end of line count
 
 				size_t found_Float = temp_.find(".");
 				if (found_Float != string::npos)
@@ -98,15 +98,14 @@ int main()
 							{
 								for (int l = j; l < temp_.length(); l++)
 								{
+									j = l;
 									if (temp_[l] == ';') { break; } //end of line count
 									if (temp_[l] == ' ') { break; } //space count
 
 									++floatcount_;
 									temp_digit += temp_[l];
-									j = l;
 								}
 							}
-
 						}
 					}
 					catch (int Error)
@@ -148,48 +147,76 @@ int main()
 				}//END OF INTEGER-IF-STATEMENT
 			}//END OF INTERGER-FLOAT-LOOP-CHECK
 
-			//FloatLoop
 			string token_ = "";
+			string token_S = "";
 			bool tokenCheck = false;
 			for (int j = 0; j < temp_.length(); j++)
 			{
-				if (temp_[j] == ';') { break; } //end of line count
+				if (temp_[j] == '"')
+				{
+					for (int v = (j + 1); v < temp_.size(); v++)
+					{
+						token_S += temp_[v];
+						if ((v + 1) < temp_.size())
+						{
+							if (temp_[(v+1)] == '"')
+							{
+								cout << "(Tok: id= " << A2iD_[3] << "line= " << line_ << " " << "str= " << "\"" << token_S << "\"" << ")" << endl;
+								token_.clear();
+								token_S.clear();
+								j = (v);
+								//break;
+							}
+						}
+
+					}
+				}
+				if (temp_[j] == '=') 
+				{
+					cout << "(Tok: id= " << A2iD_[0] << "line= " << line_ << " " << "str= " << "\"" << token_ << "\"" << ")" << endl;
+					if ((j + 1) < temp_.length()) { j = (j + 1); }//Reasses j index.
+					token_.clear();
+				}
+
 				token_ += temp_[j];
 				token_.erase(remove_if(token_.begin(), token_.end(), isspace), token_.end());
+				token_S = token_;
 				for (int z = 0; z < A2Op_.size(); z++)
 				{
-					//MAKE THIS MORE COMPLEX!
+					token_S += 
 					tokenCheck = (token_ == A2Op_[z]);
 					if (tokenCheck) 
 					{ 
 						cout << "(Tok: id= " << A2iD_[z] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[z] << "\"" << ")" << endl;
 						token_.clear();
-						break; 
+						tokenCheck = false;
 					}
 				}
 
+				//if (temp_[j] == ';')
+				//{
+				//	cout << "(Tok: id= " << A2iD_[5] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[5] << "\"" << ")" << endl;
+				//} //end of line count
 			}
-
 		}
 
 		//OUTPUT - Int
 		if ((intFlag) && !(floatFlag))
 		{
-			cout << "(Tok: id= " << A2iD_[0] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "int=" << temp_digit << ")" << endl;
+			cout << "(Tok: id= " << A2iD_[1] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "int=" << temp_digit << ")" << endl;
 			temp_digit.clear();
 			intFlag = false;
 		}
 		//OUTPUT - Float
 		else if (!(intFlag) && (floatFlag))
 		{
-			cout << "(Tok: id= " << A2iD_[1] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "float=" << temp_digit << ")" << endl;
+			cout << "(Tok: id= " << A2iD_[2] << "line= " << line_ << " " << "str= " << "\"" << temp_digit << "\" " << "float=" << temp_digit << ")" << endl;
 			temp_digit.clear();
 			intFlag = false;
 			floatFlag = false;
 		}
 
 	}
-
 
 	std::cin.ignore();
 	std::cin.ignore();
