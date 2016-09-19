@@ -1,145 +1,29 @@
 // RoughLexer.cpp : Defines the entry point for the console application.
 //
-
-#include "stdafx.h"
-#include <string>
-#include <vector>
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <ctype.h>
-#include <cctype>
-#include <algorithm>
-using namespace std;
-
-std::vector<std::string> parseID(std::vector<std::string> parseStack);
-std::vector<std::string> parseKey(std::vector<std::string> parseStack);
-std::vector<std::string> parseOp(std::vector<std::string> parseStack);
-
-//Finds non alphabet characters and parses them.
-std::vector<std::string> parseID(std::vector<std::string> parseStack)
-{
-	string tempP_ = "";
-	string iD_ = "";
-	vector<string> idParsed;
-
-	for (int i = 0; i < parseStack.size(); i++)
-	{
-		tempP_ = parseStack[i];
-		for (int k = 0; k < tempP_.length(); k++)
-		{
-			if (isalpha(tempP_[k])) { break; }
-			else { iD_ += tempP_[k]; }
-		}
-
-		idParsed.push_back(iD_);
-		iD_.clear();
-	}
-
-	return idParsed;
-}
-
-//parses alphabet and equal signs
-std::vector<std::string> parseKey(std::vector<std::string> parseStack)
-{
-	string tempP_ = "";
-	string Key_ = "";
-	vector<string> keyParsed;
-
-	for (int i = 0; i < parseStack.size(); i++)
-	{
-		tempP_ = parseStack[i];
-		for (int k = 0; k < tempP_.length(); k++)
-		{
-			if (isalpha(tempP_[k]))
-			{
-				Key_ += tempP_[k];
-			}
-
-			if (tempP_[k] == '=')
-			{
-				Key_ += tempP_[k];
-				break;
-			}
-		}
-
-		keyParsed.push_back(Key_);
-		Key_.clear();
-	}
-
-	return keyParsed;
-}
-
-//parses operators functions 
-std::vector<std::string> parseOp(std::vector<std::string> parseStack)
-{
-	string tempP_ = "";
-	string Key_ = "";
-	vector<string> keyParsed;
-
-	for (int i = 0; i < parseStack.size(); i++)
-	{
-		tempP_ = parseStack[i];
-		for (int k = 0; k < tempP_.length(); k++)
-		{
-			if (tempP_[k] == '=')
-			{
-				for (int z = (k + 1); z < tempP_.length(); z++)
-				{
-					if ((tempP_[z] != 34) && (tempP_[z] != 39) && (tempP_[z] != ' '))
-					{
-						Key_ += tempP_[z];
-					}
-				}
-			}
-		}
-
-		keyParsed.push_back(Key_);
-		Key_.clear();
-	}
-
-	return keyParsed;
-}
+#include "RoughLexer.h"
+#include "A2Lexer.h"
 
 int main()
 {
-	std::vector<std::string> A2RuleSet;
-
-	//Reads in the A2 Lexicon ruleset and puts it into A2RuleSet variable. 
-	//Returns error if unable to open text file with rules. 
-	string keyline = "";
-	ifstream keyfile("A2LexiconKey.txt");
-	if (keyfile.is_open())
-	{
-		while (getline(keyfile, keyline))
-		{
-			if (keyline.at(0) != '/')
-			{
-				A2RuleSet.push_back(keyline);
-			}
-
-		}
-		keyfile.close();
-	}
-	else cout << "Unable to open file";
-
+	RuleSet_A2 ruleset;
+	vector<string> A2_Lexer = ruleset.ruleSet_();
 	// Calls the parsing functions and translators. 
-	std::vector<std::string> A2iD_ = parseID(A2RuleSet);
-	std::vector<std::string> A2Key_ = parseKey(A2RuleSet);
-	std::vector<std::string> A2Op_ = parseOp(A2RuleSet);
+	vector<string> A2iD_  = ruleset.parseID(A2_Lexer);
+	vector<string> A2Key_ = ruleset.parseKey(A2_Lexer);
+	vector<string> A2Op_  = ruleset.parseOp(A2_Lexer);
 
 //------------------------------------------------------------------------------
-	std::string Textword_ = "";
-	std::string Textline_ = "";
-	std::vector<std::string> dummyText;
+	string Textword_ = "";
+	string Textline_ = "";
+	vector<std::string> dummyText;
 
 	int at_Line = 0;
 	int number_of_lines = 0;
 
 	//Reads in the A2 Lexicon ruleset and puts it into A2RuleSet variable. 
 	//Returns error if unable to open text file with rules. 
-	string dummyline = "";
+	string dummyline  = "";
+	string text_ = "";
 	ifstream dummyfile("DummyText.txt");
 	if (dummyfile.is_open())
 	{
@@ -161,6 +45,7 @@ int main()
 			}
 			//Line Vector: Overall structure of the program stack.
 			dummyText.push_back(temp_ + dummyline);
+
 		}
 		dummyfile.close();
 	}
@@ -172,24 +57,83 @@ int main()
 	}
 
 	int line_ = 0;
+	vector<int>line_track;
+	line_track.push_back(1);
 	for (int i = 0; i < dummyText.size(); i++)
 	{
+		//Getting the line number and getting rid of the "Line String"
 		++line_;
+		line_track.push_back(line_);
 		string key_  = "Line " + to_string(line_) + ": ";
 		size_t L_ine = dummyText[i].find(key_);
 		if (L_ine != string::npos)
 		{
 			//-----------------------++++
+			//Parsing of the string 
 			string temp_ = dummyText[i];
+			string temp_digit = "";
+			int floatcount_ = 0;
 			temp_.erase(L_ine, key_.length());
-			for (int j = 0; j < A2Op_.size(); j++)
+			cout << temp_ << endl;
+			for (int j = 0; j < temp_.length(); j++)
 		    {
+				if (temp_[j] == ';') { break; } //end of line count
 				//Modify for more then one of the keyword.
+				//Next_Token() function would go here.
+				//TRY BLOCK
+				try
+				{
+					if (isdigit(temp_[j]) && (temp_[j] != ';'))
+					{
+						temp_digit += temp_[j];
+						//No out of bounds
+						//Checks to see if there is a sign in leading number.
+						//OPTIMIZE THIS LATER ()
+						if ((j - 1) >= 0)
+						{
+							if (temp_[(j - 1)] == '-')
+							{
+								//sign would go here
+								//cout << temp_[(j - 1)] << endl;
+
+							}
+						}
+
+						//Checks to see if there is a float in the string.
+						if (floatcount_ < 1)
+						{
+							for (int l = j; l < temp_.length(); l++)
+							{
+								//temp_digit += temp_[j];
+								if (temp_[l] == ';') { break; } //end of line count
+								if (temp_[l] == ' ') { break; } //space count
+								if (temp_[l] == '.')
+								{
+									++floatcount_;
+									temp_digit += temp_[l];
+									j = l;
+									break;
+								} //float count
+							}
+						}
+
+					}
+				}
+				catch(int error)
+				{
+					cout << "Error code: " << error << endl;
+				}
+
+				if (floatcount_ == 1)
+				{
+					//if (line_ > line_track[(line_-1)])
+					//cout << temp_digit << endl;
+				}
 				size_t found = temp_.find(A2Op_[j]);
-				cout << A2Op_[j] << endl;
+				//cout << A2Op_[j] << endl;
 				if (found != string::npos)
 				{
-					//cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
+					cout << "(Tok: id= " << A2iD_[j] << "line= " << line_ << " " << "str= " << "\"" << A2Op_[j] << "\"" << ")" << endl;
 				}
 			}
 		}
