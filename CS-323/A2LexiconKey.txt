@@ -1,3 +1,11 @@
+2 id = LU LUD * // identifier.
+// LU = '_' | [a..zA..Z] // Letter-Underscore.
+// LUD = LU | [0..9] // Letter-Underscore-Digit.
+3 int = SIGN ? DIGITS // integer.
+4 float = int [ '.' DIGITS ] ? // float.
+5 string = '"' .* '"' // Cannot contain a double-quote char.
+// SIGN = plus | minus
+//DIGITS = [0..9] +
 // Unpaired delimiters
 6 comma = ','
 7 semi = ';'
@@ -44,5 +52,5 @@
 56 opshl = "<<"
 57 opshr = ">>"
 // Miscellaeous
-99 error // Unknown token.
-0 eof // End-of-Input.\
+// 99 error // Unknown token.
+// 0 eof // End-of-Input.\
