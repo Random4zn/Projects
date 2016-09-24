@@ -143,10 +143,10 @@ vector<string> Parser_A2::read_Text(string File_Name)
 	return Text_File;
 }
 
-string Parser_A2::int_check(string line_)
+string Parser_A2::int_check(string line_, int _pos)
 {
 	string temp_digit = "";
-	for (int i = 0; i < line_.length(); i++)
+	for (int i = (_pos+1); i < line_.length(); i++)
 	{
 		//TRY BLOCK
 		try
@@ -155,48 +155,29 @@ string Parser_A2::int_check(string line_)
 			{
 				temp_digit += line_[i];
 			}//END OF INTEGERCHECK-IF-STATEMENT
-		}//END OF TRY
-		catch (int Error) { cout << "Error code: " << Error << endl; }
-	}
-
-	return temp_digit;
-}
-
-string Parser_A2::float_check(string line_)
-{
-	bool floatFlag    = false;
-	string temp_digit = "";
-	//FloatLoop
-	for (int j = 0; j < line_.length(); j++)
-	{
-		size_t found_Float = line_.find(".");
-		if (found_Float != string::npos)
-		{
-			floatFlag = true;
-			//Modify for more then one of the keyword.
-			//Next_Token() function would go here.
-			//TRY BLOCK
-			try
+			if (isdigit(line_[i]))
 			{
-				if (isdigit(line_[j]) && (line_[j] != ';'))
+				size_t found_Float = line_.find(".");
+				//search for period with limit.
+				if (found_Float != string::npos)
 				{
-					if (floatFlag)
+					for (int k = found_Float; k < line_.size(); k++)
 					{
-						for (int l = j; l < line_.length(); l++)
+						if (line_[k] != ';')
 						{
-							j = l;
-							if (line_[l] == ';') { break; } //end of line count
-							if (line_[l] == ' ') { break; } //space count
-							temp_digit += line_[l];
+							temp_digit += line_[k];
 						}
 					}
+					temp_digit += "_float_";
+					break;
+				}
+				else
+				{
+					temp_digit += "_int_";
 				}
 			}
-			catch (int Error)
-			{
-				cout << "Error code: " << Error << endl;
-			}
-		}
+		}//END OF TRY
+		catch (int Error) { cout << "Error code: " << Error << endl; }
 	}
 
 	return temp_digit;
@@ -205,32 +186,42 @@ string Parser_A2::float_check(string line_)
 string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<string> _operation, string _line, string _line_num)
 {
 	string temp_string = "";
+	string temp_id = "";
+	string temp_s = "";
 	string delim_check = "";
-
-	string float_digit = "";
 	string int_digit = "";
+	vector<string> id_string;
 
-	float _float_check = 0.0;
-	vector<string> _float;
-	vector<float> _out_float;
 
 	_line.erase(remove_if(_line.begin(), _line.end(), isspace), _line.end());
 	for (int i = 0; i < _line.length(); i++)
 	{
 		temp_string += _line[i];
 		delim_check  = _line[i];
-
-		float_digit = float_check(temp_string);
-		int_digit   = int_check(temp_string);
-
-		cout << float_digit << endl;
-
-		//working on diz.
-		if (!(float_digit.empty()))
-			_float.push_back(float_digit);
+		
+		//String Check
+		if (_line[i] == '"')
+		{
+			for (int index = (i+1); index < _line.length(); index++)
+			{
+				if (_line[index] == '"')
+				{
+					i = index;
+					break;
+				}
+				temp_s += _line[index];
+			}
+		}
+		if (!(temp_s.empty()))
+		{
+			cout << "(Tok: id= " << _id[3] << "line= " << _line_num << " " << "str= " << "\"" << temp_s << "\"" << ")" << endl;
+			temp_s.clear();
+			temp_string.clear();
+			delim_check.clear();
+		}
 
 		//Unpaired Delimiters Check
-		for (int index = 0; index < 6; index++)
+		for (int index = 4; index < 6; index++)
 		{
 			if (delim_check == _operation[index])
 			{
@@ -264,28 +255,83 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 				break;
 			}
 		}
+		
+		for (int index = 0; index < id_string.size(); index++)
+		{
+			if (temp_string == id_string[index])
+			{
+				cout << "(Tok: id= " << _id[0] << "line= " << _line_num << " " << "str= " << "\"" << id_string[index] << "\"" << ")" << endl;
+				temp_string.clear();
+				delim_check.clear();
+				break;
+			}
+		}
 
+		string temp_du = "";
 		//Other Punctuation Check
 		for (int index = 30; index < 40; index++)
 		{
 			if (delim_check == _operation[index])
 			{
-				if ((!float_digit.empty()) && (delim_check != "."))
+				//Checkerino Peporino
+				if (delim_check == "=")
 				{
-					cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
-				}
-				else if ((float_digit.empty()) && (delim_check == "."))
-				{
-					cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
+					for (int f = 0; f < i; f++)
+					{
+						if (isalpha(_line[f]))
+						{
+							temp_id += _line[f];
+						}
+					}
+
+					if (!(temp_id.empty()))
+					{
+						//Still need to edit out the semi-colon stuff.
+						cout << "(Tok: id= " << _id[0]  << "line= " << _line_num << " " << "str= " << "\"" << temp_id << "\"" << ")" << endl;
+						cout << "(Tok: id= " << _id[33] << "line= " << _line_num << " " << "str= " << "\"" << delim_check << "\"" << ")" << endl;
+						if (!(temp_id.empty()))
+						{
+							id_string.push_back(temp_id);
+						}
+						temp_id.clear();
+						temp_string.clear();
+						delim_check.clear();
+					}
+
+					//FLOAT AND INT CHECK
+					temp_du = int_check(_line, i);
+					size_t found_Float = temp_du.find("_float_");
+					size_t found_Int = temp_du.find("_int_");
+					//search for period with limit.
+					if (found_Float != string::npos)
+					{
+						string temp_f = "_float_";
+						temp_du.erase(found_Float, temp_f.length());
+						if (!(temp_du.empty()))
+						{
+							//Still need to edit out the semi-colon stuff.
+							cout << "(Tok: id= " << _id[2] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " float=" << temp_du << ")" << endl;
+							temp_string.clear();
+							delim_check.clear();
+						}
+					}
+					//search for period with limit.
+					else if (found_Int != string::npos)
+					{
+						string temp_i = "_int_";
+						temp_du.erase(found_Int, temp_i.length());
+						if (!(temp_du.empty()))
+						{
+							//Still need to edit out the semi-colon stuff.
+							cout << "(Tok: id= " << _id[1] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " int=" << temp_du << ")" << endl;
+							temp_string.clear();
+							delim_check.clear();
+						}
+					}
+
 				}
 
-				if (float_digit.empty())
-				{
-					temp_string.clear();
-					delim_check.clear();
-					break;
-				}
-
+				break;
 			}
 		}
 	}
