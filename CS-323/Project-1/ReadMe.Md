@@ -3,7 +3,7 @@ PROJECT - A2 LEXICON PARSER
           Team Name : DeMorgan's loss.
           Authors   : Can Dalgir, David Luong.
           Project   : 1
-          Style     : Pragmatic
+          Style     : Pragmatic / Pair Programming.
 DESCRIPTION
 ----------------------------------------------------------------
   This program is designed to handle the A2 programming language
