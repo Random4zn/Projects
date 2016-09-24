@@ -1,168 +1,71 @@
 // RoughLexer.cpp : Defines the entry point for the console application.
 //
-
-#include <string>
-#include <vector>
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <ctype.h>
-using namespace std;
-
-std::vector<std::string> parseID(std::vector<std::string> parseStack);
-std::vector<std::string> parseKey(std::vector<std::string> parseStack);
-std::vector<std::string> parseOp(std::vector<std::string> parseStack);
-
-std::vector<std::string> parseID(std::vector<std::string> parseStack)
-{
-	string tempP_ = "";
-	string iD_    = "";
-	vector<string> idParsed;
-
-	for (int i = 0; i < parseStack.size(); i++)
-	{
-		tempP_ = parseStack[i];
-		for (int k = 0; k < tempP_.length(); k++)
-		{
-			if (isalpha(tempP_[k])) { break; }
-			else { iD_ += tempP_[k]; }
-		}
-
-		idParsed.push_back(iD_);
-		iD_.clear();
-
-	}
-
-	return idParsed;
-}
-
-std::vector<std::string> parseKey(std::vector<std::string> parseStack)
-{
-	string tempP_ = "";
-	string Key_   = "";
-	vector<string> keyParsed;
-
-	for (int i = 0; i < parseStack.size(); i++)
-	{
-		tempP_ = parseStack[i];
-		for (int k = 0; k < tempP_.length(); k++)
-		{
-			if (isalpha(tempP_[k])) 
-			{ 
-				Key_ += tempP_[k];
-			}
-
-			if (tempP_[k] == '=')
-			{
-				Key_ += tempP_[k];
-				break;
-			}
-		}
-
-		keyParsed.push_back(Key_);
-		Key_.clear();
-	}
-
-	return keyParsed;
-}
-
-
-std::vector<std::string> parseOp(std::vector<std::string> parseStack)
-{
-	string tempP_ = "";
-	string Key_   = "";
-	vector<string> keyParsed;
-
-	for (int i = 0; i < parseStack.size(); i++)
-	{
-		tempP_ = parseStack[i];
-		for (int k = 0; k < tempP_.length(); k++)
-		{
-			if (tempP_[k] == '=')
-			{
-				for (int z = (k + 1); z < tempP_.length(); z++)
-				{
-					if ((tempP_[z] != 34) && (tempP_[z] != 39) && (tempP_[z] != ' '))
-					{
-						Key_ += tempP_[z];
-					}
-					
-				}
-			}
-		}
-
-		keyParsed.push_back(Key_);
-		Key_.clear();
-	}
-
-	return keyParsed;
-}
-
+#include "RoughLexer.h"
+#include "A2Lexer.h"
+/*****************************************************************
+* PROJECT - A2 LEXICON PARSER
+* ----------------------------------------------------------------
+* Team Name : DeMorgan's loss.
+* Authors   : Can Dalgir, David Luong.
+* Project   : 1
+* Style     : Pragmatic
+* ----------------------------------------------------------------
+* DESCRIPTION
+* ----------------------------------------------------------------
+* This program is designed to handle the A2 programming language
+* lexicon. The program is additionally designed to handle dynamic
+* lexer ruleset(s) to avoid further programming language 
+* transformation(s).
+* 
+* ----------------------------------------------------------------
+* CLASS | RuleSet_A2
+* ----------------------------------------------------------------
+* The designed class is exclusively for reading the A2 lexers
+* ruleset(s) for programming the A2 lexer/parser.
+* ----------------------------------------------------------------
+*         |-ruleset
+*         |---> A2_Lexer
+*         |---> A2iD_
+*         |---> A2Key_
+*         |---> A2Op_
+*
+* ----------------------------------------------------------------
+* CLASS | Parser_A2
+* ----------------------------------------------------------------
+* The designed class is exclusively for parsing the desired
+* input from the user through a provided '.txt' file.
+* ----------------------------------------------------------------
+* CLASS | Parser_A2
+*         |-parser_
+*         |---> File_Text
+*
+******************************************************************/
 int main()
 {
-	std::string testS = "'print(\"Hypotenuse = \", ( a * a + b * b ) ^ 0.5 )\;'";
-	std::string testW = "";
-	std::vector<std::string> stackP;
-	std::vector<std::string> A2RuleSet;
+	/*----------------------------------------------------------------
+	* CLASS | RuleSet_A2
+	* ----------------------------------------------------------------
+	* Decleration segment.
+	*/
+	RuleSet_A2 ruleset;
+	vector<string> A2_Lexer = ruleset.ruleSet_(); 
+	vector<string> A2iD_    = ruleset.parseID(A2_Lexer);
+	vector<string> A2Key_   = ruleset.parseKey(A2_Lexer);
+	vector<string> A2Op_    = ruleset.parseOp(A2_Lexer);
 
-	for (int i = 0; i <= testS.length(); i++)
-	{
-		if (testS[i] != ' ')
-		{
-			testW += testS[i];
-		}
-		else
-		{
-			stackP.push_back(testW);
-			testW.clear();
-		}
-	}
+	/*----------------------------------------------------------------
+	 * CLASS | Parser_A2
+	 * ----------------------------------------------------------------
+	 * Decleration segment.
+     */
+	Parser_A2 parser_;
+	vector<string>File_Text = parser_.read_Text("DummyText.txt");
+	//FUNCTION CALL - Parser_A2Lexi
+	parser_.Parser_A2Lexi(A2iD_, A2Key_, A2Op_, File_Text);
 
-	string line;
-	ifstream myfile("A2LexiconKey.txt");
-	if (myfile.is_open())
-	{
-		while (getline(myfile, line))
-		{
-			A2RuleSet.push_back(line);
-		}
-		myfile.close();
-	}
-	else cout << "Unable to open file";
-
-	std::vector<std::string> A2iD_  = parseID(A2RuleSet);
-	std::vector<std::string> A2Key_ = parseKey(A2RuleSet);
-	std::vector<std::string> A2Op_  = parseOp(A2RuleSet);
-
-	/* for (int i = 0; i < A2iD_.size(); i++)
-	{
-		cout << A2iD_[i] << endl;
-	} */
-
-	/*for (int i = 0; i < A2Key_.size(); i++)
-	{
-		cout << A2Key_[i] << endl;
-	}*/
-
-	/*for (int i = 0; i < A2Op_.size(); i++)
-	{
-		cout << A2Op_[i] << endl;
-	}*/
-
-	for (int i = 0; i < A2Op_.size(); i++)
-	{
-		size_t found = testS.find(A2Op_[i]);
-		if (found != string::npos)
-		{
-			cout << A2iD_[i] << "" << A2Key_[i] << " "<< A2Op_[i] << endl;
-		}
-	}
-
-
-
+    //------------------------------------------------------------------------------
+	//Halts the Visual Studio console for readability of the correct output.
 	std::cin.ignore();
 	std::cin.ignore();
-
 	return 0;
 }
