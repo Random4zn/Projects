@@ -16,20 +16,16 @@ CLASS | RuleSet_A2
   The designed class is exclusively for reading the A2 lexers
   ruleset(s) for programming the A2 lexer/parser.
   
-*         |-ruleset
-*         |---> A2_Lexer
-*         |---> A2iD_
-*         |---> A2Key_
-*         |---> A2Op_
-         
-* ----------------------------------------------------------------
-* CLASS | Parser_A2
-* ----------------------------------------------------------------
+  |-ruleset        
+  |---> A2_Lexer
+  |---> A2iD_
+  |---> A2Key_
+  |---> A2Op_
+
+CLASS | Parser_A2
+----------------------------------------------------------------
   The designed class is exclusively for parsing the desired
   input from the user through a provided '.txt' file.
-* ----------------------------------------------------------------
-* CLASS | Parser_A2
-*         |-parser_
-*         |---> File_Text
-*
-******************************************************************/
+  
+         |-parser_
+         |---> File_Text
