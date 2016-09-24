@@ -241,7 +241,7 @@ vector<string> Parser_A2::read_Text(string File_Name)
 string Parser_A2::int_check(string line_, int _pos)
 {
 	string temp_digit = "";
-
+	bool float_flag = false;
 	for (int i = (_pos + 1); i < line_.length(); i++)
 	{
 		//TRY BLOCK
@@ -261,6 +261,7 @@ string Parser_A2::int_check(string line_, int _pos)
 				//search for period with limit.
 				if (found_Float != string::npos)
 				{
+					float_flag = true;
 					for (int k = found_Float; k < line_.size(); k++)
 					{
 						if (line_[k] != ';')
@@ -271,15 +272,14 @@ string Parser_A2::int_check(string line_, int _pos)
 					temp_digit += "_float_";
 					break;
 				}
-				else
-				{
-					temp_digit += "_int_";
-				}
 			}
 		}//END OF TRY
 		catch (int Error) { cout << "Error code: " << Error << endl; }
 	}
 
+	if (!(float_flag)){
+		temp_digit += "_int_";
+	}
 	return temp_digit;
 }
 
@@ -551,6 +551,8 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 				}
 
 			}
+
+			i = (i + 1);
 			#pragma endregion Region_Float_and_Int_Check_2
 		}
 
