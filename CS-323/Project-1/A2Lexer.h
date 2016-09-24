@@ -1,5 +1,12 @@
 #include "RoughLexer.h"
-
+/*****************************************************************
+* PROJECT - A2 LEXICON PARSER
+* ----------------------------------------------------------------
+* Team Name : DeMorgan's loss.
+* Authors   : Can Dalgir, David Luong.
+* Project   : 1
+* Style     : Pragmatic / Pair Programming.
+* ----------------------------------------------------------------*/
 
 /*****************************************************************
 * CLASS | RuleSet_A2
@@ -169,6 +176,13 @@ class Parser_A2
 		* RETURNS: Nothing.
 		******************************************************************/
 		void Parser_A2Lexi(vector<string> _id, vector<string> _key, vector<string> _operation, vector<string> Text_File);
+
+		void cleanParser_()
+		{
+			Text_File.clear();
+			id_string.clear();
+			number_of_lines = 0;
+		}
 
 	private:
 
