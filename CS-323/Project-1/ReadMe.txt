@@ -32,8 +32,8 @@
 *                 print( "Circumf= ", circum );
 *                }
 * Parsing Rate             : 100%
-* Syntatical Analysis Rate : 80%
-* Completion Rate          : 90%
+* Syntatical Analysis Rate : 85%
+* Completion Rate          : 92.5%
 *
 * Test Case #3: prog main { // Find the hypotenuse of a right triangle.
 *                 print( "Input legs> " );
@@ -46,13 +46,17 @@
 * Syntatical Analysis Rate : 80%
 * Completion Rate          : 85%
 *
-* Overall Completion Rate  : 91.6%
+* Overall Completion Rate  : 92.6%
 * ---------------------------------------------------------------- 
 * BUGS
 * ----------------------------------------------------------------
+* Syntactical Errors:
 * The current structure of the program strugles in the linear
 * fashion of determining the correct output stack for 'id''+''id'
 * structure.
+* 
+* Floating Point Errors:
+* There is a duplication of index 
 *
 * ----------------------------------------------------------------
 * CLASS | RuleSet_A2
@@ -77,4 +81,3 @@
 *         |---> File_Text
 *
 ******************************************************************/
-
