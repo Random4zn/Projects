@@ -4,19 +4,18 @@
   Authors   : Can Dalgir, David Luong.
   Project   : 1
   Style     : Pragmatic
-----------------------------------------------------------------
-* DESCRIPTION
+DESCRIPTION
 ----------------------------------------------------------------
   This program is designed to handle the A2 programming language
   lexicon. The program is additionally designed to handle dynamic
   lexer ruleset(s) to avoid further programming language 
   transformation(s).
-----------------------------------------------------------------
-* CLASS | RuleSet_A2
+
+CLASS | RuleSet_A2
 ----------------------------------------------------------------
   The designed class is exclusively for reading the A2 lexers
   ruleset(s) for programming the A2 lexer/parser.
-----------------------------------------------------------------
+  
 *         |-ruleset
 *         |---> A2_Lexer
 *         |---> A2iD_
