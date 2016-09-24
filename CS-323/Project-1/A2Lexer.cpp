@@ -514,7 +514,7 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
         #pragma endregion Region_Other_Punctuation_Check
 
 		/*----------------------------------------------------------------
-		* REGION | Region_Float_and_Int_Check
+		* REGION | Region_Float_and_Int_Check_2
 		* ----------------------------------------------------------------
 		* The region is designed to check for numerical structures
 		* that will provide the correct data determination weather be
@@ -556,8 +556,9 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 			i = (i + 1);
 			#pragma endregion Region_Float_and_Int_Check_2
 		}
-
 	}
+
+	cout << "(Tok: id= 0 " << "line= " << _line_num << " " << "str= " << "\""  << "\"" << ")" << endl;
 }
 
 /*****************************************************************
