@@ -5,6 +5,10 @@
 * Authors   : Can Dalgir, David Luong.
 * Project   : 1
 * Style     : Pragmatic / Pair Programming
+* IDE       : Visual Studio 2012 Professional
+* Language  : C++ / Visual C++
+*
+* Project Folder -> RoughLexer
 *
 * ----------------------------------------------------------------
 * CONTACT INFORMATION
