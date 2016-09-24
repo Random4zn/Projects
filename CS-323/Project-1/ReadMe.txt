@@ -1,10 +1,17 @@
 /*****************************************************************
 * PROJECT - A2 LEXICON PARSER
 * ----------------------------------------------------------------
-* Team Name : DeMorgan's loss.
+* Team Name : DeMorgan's_loss.
 * Authors   : Can Dalgir, David Luong.
 * Project   : 1
 * Style     : Pragmatic / Pair Programming
+*
+* ----------------------------------------------------------------
+* CONTACT INFORMATION
+* ----------------------------------------------------------------
+* Can Dalgir e-mail: cdalgir@csu.fullerton.edu
+* David Luong e-mail: davidluong@csu.fullerton.edu
+*
 * ----------------------------------------------------------------
 * DESCRIPTION
 * ----------------------------------------------------------------
@@ -62,8 +69,9 @@
 * fashion of determining the correct output stack for 'id''+''id'
 * structure.
 * 
-* Floating Point Errors:
-* There is a duplication of index 
+* Error Handling:
+* Currently there is no feature to handle the errors rather than
+* a try and catch statement for out-of-bounds check.
 *
 * ----------------------------------------------------------------
 * CLASS | RuleSet_A2
