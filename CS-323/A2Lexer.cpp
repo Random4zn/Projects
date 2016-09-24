@@ -293,20 +293,30 @@ string Parser_A2::int_check(string line_, int _pos)
 void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<string> _operation, string _line, string _line_num)
 {
 	string temp_string = "";
-	string temp_id = "";
-	string temp_s = "";
+	string temp_id     = "";
+	string temp_s      = "";
 	string delim_check = "";
-	string int_digit = "";
+	string int_digit   = "";
 
+	//FOR LOOP - The main for loop designed to handle
+	//           token collecting and check for
+	//           A2 Lexicon ruleset structures.
 	for (int i = 0; i < _line.length(); i++)
 	{
+		//IF STATEMENT - Avoids whitespace to reduce token
+		//               input.
 		if (_line[i] != ' ')
 		{
 			temp_string += _line[i];
-			delim_check = _line[i];
+			delim_check  = _line[i];
 		}
 
-		//String Check
+		/*----------------------------------------------------------------
+		* REGION | Region_String_Check
+		* ----------------------------------------------------------------
+		* The region is designed to check for structures that are allowed
+		* in the 'String' ruleset structure for an A2 Lexicon.
+		******************************************************************/
 		if (_line[i] == '"')
 		{
 			for (int index = (i + 1); index < _line.length(); index++)
@@ -325,18 +335,27 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 			temp_s.clear();
 		}
 
-		//Unpaired Delimiters Check
+		/*----------------------------------------------------------------
+		* REGION | Region_Unpaired_Delimiters_Check
+		* ----------------------------------------------------------------
+		* The region is designed to check for structures that are allowed
+		* in the 'Unpaired Delimiters' ruleset structure for an A2 Lexicon.
+		******************************************************************/
 		for (int index = 4; index < 6; index++)
 		{
 			if (delim_check == _operation[index])
 			{
 				cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
 				delim_check.clear();
-
 			}
 		}
 
-		//Keyword Check
+		/*----------------------------------------------------------------
+		* REGION | Region_Keywords_Check
+		* ----------------------------------------------------------------
+		* The region is designed to check for structures that are allowed
+		* in the 'Keywords' ruleset structure for an A2 Lexicon.
+		******************************************************************/
 		for (int index = 6; index < 20; index++)
 		{
 
@@ -347,7 +366,12 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 			}
 		}
 
-		//Paired Delimiters Check
+		/*----------------------------------------------------------------
+		* REGION | Region_Paired_Delimeters_Check
+		* ----------------------------------------------------------------
+		* The region is designed to check for structures that are allowed
+		* in the 'Paired Delimeters' ruleset structure for an A2 Lexicon.
+		******************************************************************/
 		for (int index = 21; index < 29; index++)
 		{
 			if (delim_check == _operation[index])
@@ -359,13 +383,24 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 		}
 
 		string temp_du = "";
-		//Other Punctuation Check
+		/*----------------------------------------------------------------
+		* REGION | Region_Other_Punctuation_Check
+		* ----------------------------------------------------------------
+		* The region is designed to check for structures that are allowed
+		* in the 'Other Punctuation' ruleset structure for an A2 Lexicon.
+		******************************************************************/
+        #pragma region Region_Other_Punctuation_Check
 		for (int index = 29; index < 40; index++)
 		{
 			if (delim_check == _operation[index])
 			{
-				#pragma region Region_1
-				//Checkerino Peporino
+				/*----------------------------------------------------------------
+				* REGION | Region_Id_Check
+				* ----------------------------------------------------------------
+				* The region is designed to check for structures that are allowed
+				* in the ruleset structure for an A2 Lexicon.
+				******************************************************************/
+                #pragma region Region_Id_Check
 				if (delim_check == "=")
 				{
 
@@ -391,7 +426,14 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 					}
 
 
-					//FLOAT AND INT CHECK
+					/*----------------------------------------------------------------
+					 * REGION | Region_Float_and_Int_Check
+					 * ----------------------------------------------------------------
+					 * The region is designed to check for numerical structures
+					 * that will provide the correct data determination weather be
+					 * an integer of a float.
+					 ******************************************************************/
+					#pragma region Region_Float_and_Int_Check
 					temp_du = int_check(_line, i);
 					size_t found_Float = temp_du.find("_float_");
 					size_t found_Int   = temp_du.find("_int_");
@@ -414,20 +456,18 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 						temp_du.erase(found_Int, temp_i.length());
 						if (!(temp_du.empty()))
 						{
-							//Still need to edit out the semi-colon stuff.
 							cout << "(Tok: id= " << _id[1] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " int=" << temp_du << ")" << endl;
 							temp_du.clear();
 						}
 
 					}
+                    #pragma endregion Region_Float_and_Int_Check
 				}
-				#pragma endregion Region_1
+				#pragma endregion Region_Id_Check
 
+				//IF STATEMENT - Designed to output additional delimiter(s).
 				if (delim_check != "=")
-				{
-					cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
-				}
-
+				{ cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl; }
 
 				//Queue's ID position
 				string temp_sc = "";
@@ -447,17 +487,18 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 						}
 
 						if (temp_sc.empty())
-						{
-							break;
-						}
+						{ break; }
 					}
 				}
 
+				//String and vector clearing.
+				//Memory management.
 				temp_id.clear();
 				temp_string.clear();
 				delim_check.clear();
 			}
 		}
+        #pragma endregion Region_Other_Punctuation_Check
 	}
 }
 
