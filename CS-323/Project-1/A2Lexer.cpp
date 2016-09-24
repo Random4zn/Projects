@@ -1,4 +1,13 @@
 #include "A2Lexer.h"
+/*****************************************************************
+* PROJECT - A2 LEXICON PARSER
+* ----------------------------------------------------------------
+* Team Name : DeMorgan's loss.
+* Authors   : Can Dalgir, David Luong.
+* Project   : 1
+* Style     : Pragmatic / Pair Programming.
+* ----------------------------------------------------------------*/
+
 
 /*****************************************************************
 * CLASS | RuleSet_A2
@@ -31,7 +40,6 @@ vector<string> RuleSet_A2::ruleSet_()
 			{
 				A2RuleSet.push_back(keyline);
 			}
-
 		}
 		keyfile.close();
 	}
@@ -53,7 +61,7 @@ vector<string> RuleSet_A2::ruleSet_()
 vector<string> RuleSet_A2::parseID(vector<string> parseStack)
 {
 	string tempP_ = "";
-	string iD_ = "";
+	string iD_    = "";
 	vector<string> idParsed;
 
 	for (int i = 0; i < parseStack.size(); i++)
@@ -186,9 +194,10 @@ vector<string> RuleSet_A2::parseOp(vector<string> parseStack)
 ******************************************************************/
 vector<string> Parser_A2::read_Text(string File_Name)
 {
+	cout << File_Name << endl;
 	string _line     = "";
 	string text_     = "";
-	ifstream file_("DummyText.txt");
+	ifstream file_(File_Name);
 	if (file_.is_open())
 	{
 		while (getline(file_, _line))
@@ -238,10 +247,14 @@ string Parser_A2::int_check(string line_, int _pos)
 		//TRY BLOCK
 		try
 		{
-			if (isdigit(line_[i]) && (line_[i] != ';'))
+			if (isdigit(line_[i]))
 			{
 				temp_digit += line_[i];
 			}//END OF INTEGERCHECK-IF-STATEMENT
+			else
+			{
+				break;
+			}
 			if (isdigit(line_[i]))
 			{
 				size_t found_Float = line_.find(".");
@@ -499,6 +512,48 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 			}
 		}
         #pragma endregion Region_Other_Punctuation_Check
+
+		/*----------------------------------------------------------------
+		* REGION | Region_Float_and_Int_Check
+		* ----------------------------------------------------------------
+		* The region is designed to check for numerical structures
+		* that will provide the correct data determination weather be
+		* an integer of a float.
+		******************************************************************/
+		if (isdigit(_line[i]))
+		{
+			#pragma region Region_Float_and_Int_Check_2
+			temp_du.clear();
+			temp_du = int_check(_line, (i-1));
+			size_t found_Float = temp_du.find("_float_");
+			size_t found_Int   = temp_du.find("_int_");
+			//search for period with limit.
+			if (found_Float != string::npos)
+			{
+				string temp_f = "_float_";
+				temp_du.erase(found_Float, temp_f.length());
+				if (!(temp_du.empty()))
+				{
+					//Still need to edit out the semi-colon stuff.
+					cout << "(Tok: id= " << _id[2] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " float=" << temp_du << ")" << endl;
+					temp_du.clear();
+				}
+
+			}
+			else if (found_Int != string::npos)
+			{
+				string temp_i = "_int_";
+				temp_du.erase(found_Int, temp_i.length());
+				if (!(temp_du.empty()))
+				{
+					cout << "(Tok: id= " << _id[1] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " int=" << temp_du << ")" << endl;
+					temp_du.clear();
+				}
+
+			}
+			#pragma endregion Region_Float_and_Int_Check_2
+		}
+
 	}
 }
 
