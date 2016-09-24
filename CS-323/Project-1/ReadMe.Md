@@ -1,4 +1,4 @@
-* PROJECT - A2 LEXICON PARSER
+PROJECT - A2 LEXICON PARSER
 ----------------------------------------------------------------
   Team Name : DeMorgan's loss.
   Authors   : Can Dalgir, David Luong.
@@ -16,11 +16,11 @@ CLASS | RuleSet_A2
   The designed class is exclusively for reading the A2 lexers
   ruleset(s) for programming the A2 lexer/parser.
   
-  |-ruleset        
-  |---> A2_Lexer
-  |---> A2iD_
-  |---> A2Key_
-  |---> A2Op_
+         |-ruleset        
+         |---> A2_Lexer
+         |---> A2iD_
+         |---> A2Key_
+         |---> A2Op_
 
 CLASS | Parser_A2
 ----------------------------------------------------------------
