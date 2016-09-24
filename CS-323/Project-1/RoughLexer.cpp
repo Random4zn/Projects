@@ -59,9 +59,25 @@ int main()
 	 * Decleration segment.
      */
 	Parser_A2 parser_;
-	vector<string>File_Text = parser_.read_Text("DummyText.txt");
+	vector<string>File_Text_1 = parser_.read_Text("TestCase_1.txt");
+
 	//FUNCTION CALL - Parser_A2Lexi
-	parser_.Parser_A2Lexi(A2iD_, A2Key_, A2Op_, File_Text);
+	parser_.Parser_A2Lexi(A2iD_, A2Key_, A2Op_, File_Text_1);
+	cout << "Finished parsing Testcase_1..." << endl;
+	parser_.cleanParser_();
+	cin.ignore();
+
+	vector<string>File_Text_2 = parser_.read_Text("TestCase_2.txt");
+	parser_.Parser_A2Lexi(A2iD_, A2Key_, A2Op_, File_Text_2);
+	cout << "Finished parsing Testcase_2..." << endl;
+	parser_.cleanParser_();
+	cin.ignore();
+
+	vector<string>File_Text_3 = parser_.read_Text("TestCase_3.txt");
+	parser_.Parser_A2Lexi(A2iD_, A2Key_, A2Op_, File_Text_3);
+	cout << "Finished parsing Testcase_3..." << endl;
+	parser_.cleanParser_();
+	cin.ignore();
 
     //------------------------------------------------------------------------------
 	//Halts the Visual Studio console for readability of the correct output.
