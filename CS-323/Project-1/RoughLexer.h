@@ -1,4 +1,13 @@
 /*****************************************************************
+* PROJECT - A2 LEXICON PARSER
+* ----------------------------------------------------------------
+* Team Name : DeMorgan's loss.
+* Authors   : Can Dalgir, David Luong.
+* Project   : 1
+* Style     : Pragmatic / Pair Programming.
+* ----------------------------------------------------------------*/
+
+/*****************************************************************
 * HEADER - C++ HEADERS
 * ----------------------------------------------------------------
 * This section is designed to hold all the user headers in the
