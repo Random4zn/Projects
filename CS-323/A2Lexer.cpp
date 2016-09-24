@@ -183,6 +183,17 @@ string Parser_A2::int_check(string line_, int _pos)
 	return temp_digit;
 }
 
+string Parser_A2::id_check(string line_, int _pos)
+{
+	return "";
+}
+
+string Parser_A2::next_token()
+{
+
+	return "";
+}
+
 string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<string> _operation, string _line, string _line_num)
 {
 	string temp_string = "";
@@ -190,8 +201,29 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 	string temp_s = "";
 	string delim_check = "";
 	string int_digit = "";
-	vector<string> id_string;
 
+	//Looks For String Spaces
+	//Create a function for it!
+	for (int i = 0; i < _line.size(); i++)
+	{
+		//String Check
+		if (_line[i] == '"')
+		{
+			for (int index = (i + 1); index < _line.length(); index++)
+			{
+				if (_line[index] == '"')
+				{
+					i = index;
+					break;
+				}
+
+				if (_line[index] == ' ')
+				{
+					space_pos.push_back(index);
+				}
+			}
+		}
+	}
 
 	_line.erase(remove_if(_line.begin(), _line.end(), isspace), _line.end());
 	for (int i = 0; i < _line.length(); i++)
@@ -209,6 +241,15 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 					i = index;
 					break;
 				}
+
+				for (int _sp = 0; _sp < space_pos.size(); _sp++)
+				{
+					if (index == space_pos[_sp])
+					{
+						temp_s += ' ';
+						break;
+					}
+				}
 				temp_s += _line[index];
 			}
 		}
@@ -216,8 +257,6 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 		{
 			cout << "(Tok: id= " << _id[3] << "line= " << _line_num << " " << "str= " << "\"" << temp_s << "\"" << ")" << endl;
 			temp_s.clear();
-			temp_string.clear();
-			delim_check.clear();
 		}
 
 		//Unpaired Delimiters Check
@@ -226,9 +265,7 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 			if (delim_check == _operation[index])
 			{
 				cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
-				temp_string.clear();
-				delim_check.clear();
-				break;
+
 			}
 		}
 
@@ -238,9 +275,6 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 			if (temp_string == _operation[index])
 			{
 				cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
-				temp_string.clear();
-				delim_check.clear();
-				break;
 			}
 		}
 
@@ -250,20 +284,6 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 			if (delim_check == _operation[index])
 			{
 				cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
-				temp_string.clear();
-				delim_check.clear();
-				break;
-			}
-		}
-		
-		for (int index = 0; index < id_string.size(); index++)
-		{
-			if (temp_string == id_string[index])
-			{
-				cout << "(Tok: id= " << _id[0] << "line= " << _line_num << " " << "str= " << "\"" << id_string[index] << "\"" << ")" << endl;
-				temp_string.clear();
-				delim_check.clear();
-				break;
 			}
 		}
 
@@ -276,6 +296,8 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 				//Checkerino Peporino
 				if (delim_check == "=")
 				{
+
+					//Creates the ID -
 					for (int f = 0; f < i; f++)
 					{
 						if (isalpha(_line[f]))
@@ -284,22 +306,22 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 						}
 					}
 
+					//Displays The ID-
 					if (!(temp_id.empty()))
 					{
 						//Still need to edit out the semi-colon stuff.
 						cout << "(Tok: id= " << _id[0]  << "line= " << _line_num << " " << "str= " << "\"" << temp_id << "\"" << ")" << endl;
-						cout << "(Tok: id= " << _id[33] << "line= " << _line_num << " " << "str= " << "\"" << delim_check << "\"" << ")" << endl;
+						cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
 						if (!(temp_id.empty()))
 						{
 							id_string.push_back(temp_id);
 						}
-						temp_id.clear();
-						temp_string.clear();
-						delim_check.clear();
 					}
+
 
 					//FLOAT AND INT CHECK
 					temp_du = int_check(_line, i);
+
 					size_t found_Float = temp_du.find("_float_");
 					size_t found_Int = temp_du.find("_int_");
 					//search for period with limit.
@@ -311,9 +333,9 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 						{
 							//Still need to edit out the semi-colon stuff.
 							cout << "(Tok: id= " << _id[2] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " float=" << temp_du << ")" << endl;
-							temp_string.clear();
-							delim_check.clear();
+							temp_du.clear();
 						}
+
 					}
 					//search for period with limit.
 					else if (found_Int != string::npos)
@@ -324,13 +346,41 @@ string Parser_A2::token_match(vector<string> _id, vector<string> _key, vector<st
 						{
 							//Still need to edit out the semi-colon stuff.
 							cout << "(Tok: id= " << _id[1] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " int=" << temp_du << ")" << endl;
-							temp_string.clear();
-							delim_check.clear();
+							temp_du.clear();
+						}
+
+					}
+					else
+					{
+						//Queue's ID position
+						string temp_sc = "";
+						for (int outer_ = i; outer_ < _line.length(); outer_++)
+						{
+							if (isalpha(_line[outer_]))
+							{
+								temp_sc += _line[outer_];
+								for (int inner_ = 0; inner_ < id_string.size(); inner_++)
+								{
+									if (temp_sc == id_string[inner_])
+									{
+										//Still need to edit out the semi-colon stuff.
+										cout << "(Tok: id= " << _id[0] << "line= " << _line_num << " " << "str= " << "\"" << temp_sc << "\"" << ")" << endl;
+										break;
+									}
+								}
+							}
 						}
 					}
 
 				}
+				else
+				{
+					cout << "(Tok: id= " << _id[index] << "line= " << _line_num << " " << "str= " << "\"" << _operation[index] << "\"" << ")" << endl;
+				}
 
+				temp_id.clear();
+				temp_string.clear();
+				delim_check.clear();
 				break;
 			}
 		}
