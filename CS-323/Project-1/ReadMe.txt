@@ -4,7 +4,7 @@
 * Team Name : DeMorgan's loss.
 * Authors   : Can Dalgir, David Luong.
 * Project   : 1
-* Style     : Pragmatic
+* Style     : Pragmatic / Pair Programming
 * ----------------------------------------------------------------
 * DESCRIPTION
 * ----------------------------------------------------------------
@@ -12,6 +12,13 @@
 * lexicon. The program is additionally designed to handle dynamic
 * lexer ruleset(s) to avoid further programming language 
 * transformation(s).
+*
+* ---------------------------------------------------------------- 
+* A2 Lexicon Usage Guidelines
+* ---------------------------------------------------------------- 
+* The current A2 Lexicon program requires you to edit one of the
+* three test case files 'TestCase_1.txt'..etc.. in order to test
+* the A2 Lexigraphical analysis of the program.
 *
 * ---------------------------------------------------------------- 
 * TEST CASE SUCCESS
@@ -81,3 +88,4 @@
 *         |---> File_Text
 *
 ******************************************************************/
+
