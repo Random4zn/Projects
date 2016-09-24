@@ -536,6 +536,7 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 				{
 					//Still need to edit out the semi-colon stuff.
 					cout << "(Tok: id= " << _id[2] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " float=" << temp_du << ")" << endl;
+					i = (i + found_Float);
 					temp_du.clear();
 				}
 
@@ -546,12 +547,12 @@ void Parser_A2::next_token(vector<string> _id, vector<string> _key, vector<strin
 				temp_du.erase(found_Int, temp_i.length());
 				if (!(temp_du.empty()))
 				{
+					i = (i + found_Int);
 					cout << "(Tok: id= " << _id[1] << "line= " << _line_num << " " << "str= " << "\"" << temp_du << "\"" << " int=" << temp_du << ")" << endl;
 					temp_du.clear();
 				}
 
 			}
-
 			i = (i + 1);
 			#pragma endregion Region_Float_and_Int_Check_2
 		}
