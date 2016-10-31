@@ -1,0 +1,43 @@
+/* For Stylesheet */
+form
+{
+	display:: inline-block;
+	text-align: center;
+	border:3px solid #f1f1f1;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-style: normal;
+	resize: both;
+	margin: 0 auto;
+	width: 200px;
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] 
+{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Body Stylesheet */
+body 
+{
+    background-color: #e6e6ff;
+}
+
+h1 
+{
+    color: blue;
+	font-family: verdana;
+	font-size:300%;
+}
+
+p 
+{
+    color: red;
+	font-family: verdana;
+	font-size:160%;
+}
