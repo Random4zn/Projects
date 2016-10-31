@@ -11,6 +11,19 @@ form
 	width: 200px;
 }
 
+.button
+{
+	background-color: #555555;
+	color: white;
+	border: none;
+	cursor: pointer;
+	margin: 5px;
+	padding:10px 20px;
+	text-align: center;
+	display:inline-block;
+	font-size: 12px;
+}
+
 /* Full-width inputs */
 input[type=text], input[type=password] 
 {
@@ -25,7 +38,7 @@ input[type=text], input[type=password]
 /* Body Stylesheet */
 body 
 {
-    background-color: #e6e6ff;
+    background-color: #ccffff;
 }
 
 h1 
